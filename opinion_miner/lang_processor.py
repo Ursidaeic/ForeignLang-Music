@@ -13,29 +13,30 @@ def formatter(text):
     text = re.sub(r"http\S*\b", '', text)
     return emoji.get_emoji_regexp().sub(r'', text)
 
+def check_eng(string):
+    if len(string) <= 440:
+        formatted = formatter(string)
+        details = cld2.detect(formatted)
+        code = details[2][0][1] 
+        if code == "en":
+            return True
+
+        if code =="un":
+            wds = re.findall(r'\w+', formatted)
+            if len(wds) <= 10:
+                a = 0
+                for word in wds:
+                    suggestions = sym_spell.lookup(word, Verbosity.CLOSEST, max_edit_distance=0)
+                    if len(suggestions)!=0:
+                        a+=1
+                try:
+                    perc = ((a/len(wds))*100)
+                    if perc >= 50:
+                        return True
+
+
 
 def process_lang(filename):
-    def check_eng(string):
-        if len(string) <= 440:
-            formatted = formatter(item['text'])
-            details = cld2.detect(formatted)
-            code = details[2][0][1] 
-            if code == "en":
-                return True
-
-            if code =="un":
-                wds = re.findall(r'\w+', formatted)
-                if len(wds) <= 10:
-                    a = 0
-                    for word in wds:
-                        suggestions = sym_spell.lookup(word, Verbosity.CLOSEST, max_edit_distance=0)
-                        if len(suggestions)!=0:
-                            a+=1
-                    try:
-                        perc = ((a/len(wds))*100)
-                        if perc >= 50:
-                            return True
-
     eng_com = []
     count = 0 
     with open(f"comments/{filename}", "r", encoding="utf8") as f:
@@ -54,9 +55,6 @@ def process_lang(filename):
                 eng_com.append(item)
                 count+=1
                 
-                        
-                    
-        
     eng_com.append({'total_comments': count})
     nn = filename.split("_")
     new_name = f"{nn[0]}_{nn[1]}_{eng_com[-1]['total_comments']}"

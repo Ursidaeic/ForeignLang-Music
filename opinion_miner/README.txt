@@ -1,4 +1,4 @@
-A Support Vecotor Machine trained on YouTube comments to identify comments that contain opinion-sentiment. A pickled trained model is supplied but the scripts used to train said model are as well if you have your own dataset.
+A Support Vector Machine trained on YouTube comments to identify comments that contain opinion-sentiment. A pickled trained model is supplied but the scripts used to train said model are as well if you have your own dataset.
 
 In the resources folder there are 3 useful dictionaries for PRSR.py:
 1) abbreviations: a list of common abbreviations to be checked against when spell checking strings.
