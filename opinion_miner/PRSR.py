@@ -17,7 +17,7 @@ from resources.abbreviations import abbrev_map
 
 
 
-def expand_contractions(text, contraction_mapping=CONTRACTION_MAP):
+def expand(text, contraction_mapping=CONTRACTION_MAP):
     text = re.sub(r"’", "'", text)
     if text in abbrev_map:
         return(abbrev_map[text])
@@ -68,11 +68,11 @@ def prsr(comments_list):
     for p_com in comments_list:
         p_com = p_com.lower()
         
-        #expand out contractions
+        #expand out contractions and abbreviations
         tok = p_com.split(" ")
         z = []
         for w in tok:
-            wx = expand_contractions(w)
+            wx = expand(w)
             if wx == 0:
                 continue
             z.append(wx)
@@ -86,7 +86,6 @@ def prsr(comments_list):
         clean = []
         
         for w in tokenized:
-            #spellchecker doesn't like emojis or punctuation (beyond . and ,) so need to filter for them first
             if w in emoji_set:
                 clean.append(w)
                 continue
@@ -96,7 +95,7 @@ def prsr(comments_list):
                 clean.append(w)
             else:
                 suggestions = sym_spell.lookup(w, Verbosity.CLOSEST,
-                               max_edit_distance=0, include_unknown=True)
+                               max_edit_distance=1, include_unknown=True)
                 sug = str(suggestions[0])
                 sug = sug.split(", ")[0]
                 clean.append(sug)
@@ -112,12 +111,10 @@ def prsr(comments_list):
     stop_words = set(("be", "i", "this", "the", "it", "a", "and", "to", "you", "of", "do", "in", "my", "me", "that", "with", "for", "have", "on"))
     stopped = []
     for lemm in lemmatized:
-        stop = [l for l in lemm if l not in stop_words]
-        stop2 = [l for l in stop if l not in sw]
-    
-#         stopped.append(" ".join(stop))
-        stopped.append(stop2)
-    return stop2
+        stop = [l for l in lemm if l not in sw]
+        stopped.append(stop)
+        
+    return stopped
 
 
 tokenizer = TweetTokenizer(strip_handles=True, reduce_len=True)
