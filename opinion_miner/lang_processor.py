@@ -33,6 +33,8 @@ def check_eng(string):
                     perc = ((a/len(wds))*100)
                     if perc >= 50:
                         return True
+                except:
+                    return False
 
 
 
@@ -46,7 +48,7 @@ def process_lang(filename):
         if 'total_comments' not in item:
             if check_eng(item['text']) == True:
                 if 'replies' in item:
-                reps = []
+                    reps = []
                     for reply in item['replies']:
                         if check_eng(reply['text']) == True:
                             reps.append(reply)
