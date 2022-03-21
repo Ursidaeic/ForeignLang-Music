@@ -1,6 +1,5 @@
-# %%
-import pickle, argparse, math, random
 import numpy as np
+import pickle, argparse
 from tqdm import tqdm
 from pprint import pprint
 
@@ -74,31 +73,3 @@ if __name__ == "__main__":
 
     fn = args.songname
     process_results(fn)
-    
-    # cossim = []
-    # chunk_iter = 0
-    # with open (f"memes/results/{fn}_cosines.pickle", "rb") as f:
-    #     while True:
-    #         try:
-    #             chunk = pickle.load(f)
-    #             for x in range(chunk.shape[0]):
-    #                 chunk[x][0]+=chunk_iter
-    #             cossim.append(chunk)
-    #             chunk_iter+=100
-    #         except EOFError:
-    #             break
-
-    # chunk = math.floor(len(cossim))
-    # cossim = [cossim[0:chunk], cossim[chunk+1:chunk*2], cossim[chunk*2+1:]]
-
-    # pool = mp.Pool(3)
-    # manager = mp.Manager()
-    # results_list = manager.list()
-
-    # M = pool.starmap(process_results, zip(cossim, results_list))
-
-
-
-    # with open (f"memes/results/{fn}.pickle", "wb") as f:
-    #     pickle.dump(results_list, f)
-        

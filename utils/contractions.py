@@ -8,8 +8,8 @@ Created on Mon Aug 01 01:11:02 2016
 CONTRACTION_MAP = {
 "ain't": "is not",
 "aren't": "are not",
-"can't": "cannot",
-"can't've": "cannot have",
+"can't": "can not",
+"can't've": "can not have",
 "'cause": "because",
 "could've": "could have",
 "couldn't": "could not",

@@ -12,9 +12,9 @@ from emoji import UNICODE_EMOJI
 import pkg_resources
 from symspellpy import SymSpell, Verbosity
 
-from utils.NEW_NAMES import new_names
-from utils.contractions import CONTRACTION_MAP
-from utils.abbreviations import abbrev_map
+from NEW_NAMES import new_names
+from contractions import CONTRACTION_MAP
+from abbreviations import abbrev_map
 
 
 

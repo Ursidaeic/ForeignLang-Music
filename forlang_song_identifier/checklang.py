@@ -1,7 +1,8 @@
-import json, requests, time, random, re, textdistance, threading, cld2
+import json, requests, time, random, re, textdistance, threading
 from queue import Queue
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+import pycld2 as cld2
 
 def dump_func(filename, obj):
     with open(f"{filename}.json", "w", encoding="utf8") as f:

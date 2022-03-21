@@ -1,4 +1,4 @@
-import requests, time, random, json, configparser, os
+import requests, time, random, json, configparser
 from bs4 import BeautifulSoup
 
 

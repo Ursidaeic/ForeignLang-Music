@@ -20,13 +20,6 @@ def lcs(POS_tags_list):
             pairs_count[tag_pair].append(idx) 
     
     return pairs_count
-    results = set()
-    # for v in tqdm(pairs_count.values()):
-    #     for item in itertools.combinations(v, 2):
-    #         results.add(item)
-    # print(sys.getsizeof(results))
-    # print(len(results)) 
-    # return results
     
 #function to turn vocab-count vectors into unit vectors as we do not care about their magnitude 
 def normalise(A):
