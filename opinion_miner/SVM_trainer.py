@@ -4,7 +4,7 @@ from sklearn.svm import LinearSVC
 from sklearn.metrics import classification_report
 
 import pickle, json
-from PRSR import prsr
+from utils.PRSR import prsr
 import pandas as pd
 
 

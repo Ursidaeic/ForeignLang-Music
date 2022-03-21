@@ -1,11 +1,10 @@
-import nltk, re, json, os
+import re
 
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk.tokenize import TweetTokenizer
 from nltk.tokenize import sent_tokenize
-
 
 from emoji import UNICODE_EMOJI
 

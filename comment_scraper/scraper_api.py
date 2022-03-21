@@ -4,9 +4,10 @@ import json
 import time
 import re
 
+#this is code heavily based on the following with some minor changes:
+#https://github.com/ashleve/youtube_multi_video_comment_downloader/blob/master/yt-comment-scraper.py
+
 start_time = time.time()
-
-
 class YouTubeApi():
     er = 0
     params = {
