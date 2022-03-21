@@ -21,7 +21,7 @@ def get_chart(url, fromweek, toweek):
         "Accept-Language": "en,de;q=0.9,en-US;q=0.8,fr-FR;q=0.7,fr;q=0.6,es;q=0.5",  
         "authority": "acharts.co", 
         "Upgrade-Insecure-Requests": "1",
-        "User-Agent": "Research Project with the University of Birmingham (cxa643@student.bham.ac.uk)")
+        "User-Agent": "Research Project with the University of Birmingham (cxa643@student.bham.ac.uk)"
     }   
     
     r = requests.get(url, headers=headers)
