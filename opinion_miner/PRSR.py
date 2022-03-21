@@ -4,20 +4,21 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk.tokenize import TweetTokenizer
+from nltk.tokenize import sent_tokenize
+
 
 from emoji import UNICODE_EMOJI
-
 
 import pkg_resources
 from symspellpy import SymSpell, Verbosity
 
-from resources.NAMES import names
-from resources.contractions import CONTRACTION_MAP
-from resources.abbreviations import abbrev_map
+from opinion_miner.resources.NEW_NAMES import new_names
+from contractions import CONTRACTION_MAP
+from abbreviations import abbrev_map
 
 
 
-def expand(text, contraction_mapping=CONTRACTION_MAP):
+def expand_contractions(text, contraction_mapping=CONTRACTION_MAP):
     text = re.sub(r"’", "'", text)
     if text in abbrev_map:
         return(abbrev_map[text])
@@ -47,10 +48,11 @@ def reduce_lengthening(text):
     pattern = re.compile(r"(.)\1{2,}")
     return pattern.sub(r"\1\1", text)
 
-def lemmatize_sentence(tokens):
+def lemmatize_sentence(tokens, POS_list):
     lemmatizer = WordNetLemmatizer()
     lemmatized_sentence = []
-    for word, tag in pos_tag(tokens):
+    
+    for word, tag in POS_list:
         if tag.startswith('NN'):
             pos = 'n'
         elif tag.startswith('VB'):
@@ -61,65 +63,104 @@ def lemmatize_sentence(tokens):
     return lemmatized_sentence
 
 
-def prsr(comments_list):
-    if type(comments_list) != list:
-        comments_list = [comments_list]
+def prsr(comment, return_POS=False, combine_neg=False, sent_tokenizer=False):
+    if type(comment) == list:
+        comment = comment[0]
+##    cleaned = []
+##    for p_com in comments_list:
+        
+    p_com = comment.lower()
+    
+    #expand out contractions
+    tok = p_com.split(" ")
+    z = []
+    for w in tok:
+        wx = expand_contractions(w)
+        if wx == 0:
+            continue
+        z.append(wx)
+    st = " ".join(z)
+
+    if combine_neg == True:
+        if "not" in st:
+            r = re.findall(r"not \w+\b", st)
+            for match in r:
+                st = re.sub(match, re.sub(" ", "_", match), st)
+    
+    if sent_tokenizer==True:
+        st = sent_tokenize(st)
+        pos_list = []
+    else:
+        st = [st]
     cleaned = []
-    for p_com in comments_list:
-        p_com = p_com.lower()
-        
-        #expand out contractions and abbreviations
-        tok = p_com.split(" ")
-        z = []
-        for w in tok:
-            wx = expand(w)
-            if wx == 0:
-                continue
-            z.append(wx)
-        st = " ".join(z)
-        
-        
-        tokenized = tokenizer.tokenize(st)
-        reduced = [reduce_lengthening(token) for token in tokenized]
-        
+    POS_list = []
+    for sent in st:
+        tokenized = tokenizer.tokenize(sent)
+        tokenized = [reduce_lengthening(token) for token in tokenized]
         #clean and spellcheck the data
         clean = []
         
+        flag = False
         for w in tokenized:
-            if w in emoji_set:
+            if w == "i":
+                w = "I"
+            if flag == True:
+                flag = False
+                continue
+            if w in emoji_set and w not in clean:
                 clean.append(w)
                 continue
             elif re.match(r"[^a-zA-Z]", w):
                 continue
-            elif w in names:
-                clean.append(w)
+            elif w in new_names:
+                try:                    
+                    if tokenized[tokenized.index(w)+1] in new_names:
+                        flag = True
+                    if f"{w} {tokenized[tokenized.index(w)+1]}" in new_names:
+                        flag = True
+
+                    if f"{tokenized[tokenized.index(w)+1]} {w}" in new_names:
+                        clean.pop(-1)
+                except IndexError:
+                    pass
+                clean.append("Artist_name")
             else:
                 suggestions = sym_spell.lookup(w, Verbosity.CLOSEST,
-                               max_edit_distance=1, include_unknown=True)
+                               max_edit_distance=0, include_unknown=True)
                 sug = str(suggestions[0])
                 sug = sug.split(", ")[0]
                 clean.append(sug)
                     
                 
-
         cleaned.append(clean)
         
+        #generate pos_list
+        if sent_tokenizer == True:
+            POS = pos_tag(clean)
+            POS_list.append(POS)
+            lemmatized = lemmatize_sentence(clean, POS)
+            
+        else:
+            POS_list = pos_tag(clean)
+            lemmatize_sentence(clean, POS_list)   
+#     sw = set(("be", "I", "this", "the", "it", "a", "and", "to", "you", "of", "do", "in", "my", "me", "that", "with", "for", "have", "on"))
     
-    #lemmatize and remove stop words
-    lemmatized = [lemmatize_sentence(clean) for clean in cleaned]
+    processed = []
+    for item in cleaned:
+        stop = [l for l in item if l not in sw]
+        processed.append(stop)
+    if sent_tokenizer == False:
+        processed = processed[0]
     
-    stop_words = set(("be", "i", "this", "the", "it", "a", "and", "to", "you", "of", "do", "in", "my", "me", "that", "with", "for", "have", "on"))
-    stopped = []
-    for lemm in lemmatized:
-        stop = [l for l in lemm if l not in sw]
-        stopped.append(stop)
-        
-    return stopped
-
+    if return_POS == True:
+        return (processed, POS_list)
+    else:
+        return processed
 
 tokenizer = TweetTokenizer(strip_handles=True, reduce_len=True)
 
 sw = set(stopwords.words('english'))
+sw.add("I")
 
 emoji_set = set()
 for emoji in UNICODE_EMOJI["en"].keys():
@@ -131,6 +172,7 @@ dictionary_path = pkg_resources.resource_filename(
     "symspellpy", "frequency_dictionary_en_82_765.txt")
 
 sym_spell.load_dictionary(dictionary_path, term_index=0, count_index=1)
+
 
 if __name__ == "__main__":
     pass
