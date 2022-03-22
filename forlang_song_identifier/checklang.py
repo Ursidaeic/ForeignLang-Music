@@ -21,6 +21,7 @@ def get_func(url, sleep_range):
 
 
 def formatter(text):
+    #common words that confuse the lang detection software
     stopwords = set(("oh", "eh","la", "ha", "hallelujah", "ah", "ooh"))
     text = re.findall(r'\w+\'?\w+\n?', text)
 

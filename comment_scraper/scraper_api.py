@@ -1,4 +1,4 @@
-import argparse
+import argparse,os
 import requests
 import json
 import time
@@ -19,7 +19,9 @@ class YouTubeApi():
     YOUTUBE_COMMENTS_URL = 'https://www.googleapis.com/youtube/v3/commentThreads'
     total_comment_counter = 0
     comment_counter = 0
-    
+    author_dict = {}
+    author_num = 1
+
     def is_error_response(self, response):
         error = response.get('error')
         if error is None:
@@ -47,13 +49,22 @@ class YouTubeApi():
     def format_comments(self, results, likes_required):
         comments_list = []
         for item in results["items"]:
-
+            
             comment = item["snippet"]["topLevelComment"]      
             author = comment['snippet']["authorDisplayName"]     
             text = comment['snippet']["textDisplay"]
             likes = comment['snippet']["likeCount"]
             reply_count = item['snippet']['totalReplyCount']
             date = comment['snippet']['publishedAt']
+            
+            
+            #some logic to anonomise authors of comments to "User n"
+            if author not in self.author_dict:
+                self.author_dict[author] = self.author_num
+                author = f"User {self.author_num}"
+                self.author_num+=1
+            else:
+                author = f"User {self.author_dict[author]}"
 
             comments_list.append({    #appends comment as a dictionary
                 "author" : author,
@@ -147,8 +158,9 @@ class YouTubeApi():
 
 
     def get_video_id_list(self, filename):
+        print(os.listdir("comment_scraper"))
         try:
-            with open(filename, 'r', encoding="utf8") as file:
+            with open(f"comment_scraper/{filename}", 'r', encoding="utf8") as file:
                 URL_list = file.readlines()
         except FileNotFoundError:
             exit("File \"" + filename + "\" not found")
@@ -172,7 +184,6 @@ def main():
     required.add_argument("--key", '-k', help="Developer API key needed for authentication")
     optional.add_argument("--likes", '-l', help="The amount of likes a comment needs to be saved", type=int)
     optional.add_argument("--input", '-i', help="URL list file name")
-    optional.add_argument("--output", '-o', help="Output file name")
     optional.add_argument("--c_token", '-c', help="Continuation token for continuing from where you left off")
     optional.add_argument("--help", '-h', help="Help", action='help')
     args = parser.parse_args()
@@ -189,9 +200,6 @@ def main():
     if args.input:
         input_file = args.input
 
-#     output_file = "Comments"
-#     if args.output:
-#         output_file = args.output
     if not args.c_token:
         c_token = None
 
@@ -201,7 +209,6 @@ def main():
         exit("All videos downloaded")
     try:
         while len(urllist) != 0:
-            comment_counter = 0
             video_id = urllist[0][0]
             video_name = urllist[0][1]
             nvideo_name = video_name.split("-")
@@ -215,8 +222,8 @@ def main():
             except:
                 new_name = f"{new_name}_0"
             if comments:
-                with open("comments\\"+new_name+".json", "w", encoding="utf8") as f:
-                    json.dump(comments, f, ensure_ascii=False)
+                with open(f"comment_scraper/comments/{new_name}.json", "w", encoding="utf8") as f:
+                    json.dump(comments, f, ensure_ascii=False, indent=4)
                     
                     
             urllist.pop(0)     

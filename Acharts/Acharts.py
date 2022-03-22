@@ -1,9 +1,6 @@
 import requests, time, random, json, configparser
 from bs4 import BeautifulSoup
 
-
-
-
 def get_chart(url, fromweek, agent):
     
 
@@ -51,7 +48,7 @@ def get_chart(url, fromweek, agent):
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
-    config.read('acharts_config.ini')
+    c = config.read('acharts/acharts_config.ini')
     c_args = config['variables']
 
     if c_args['from_week'] == "today":
@@ -120,11 +117,11 @@ if __name__ == '__main__':
         year = str(year)
         fromweek = year + "/" + week
 
-        with open (f'chart_data/{output}.json', "w", encoding='utf8') as f:
+        with open (f'acharts/chart_data/{output}.json', "w", encoding='utf8') as f:
             json.dump(chart_data, f, ensure_ascii=False, indent=4)
 
 
         time.sleep(random.randint(5,10))
 
-    with open (f'chart_data/{output}.json', "w", encoding='utf8') as f:
+    with open (f'acharts/chart_data/{output}.json', "w", encoding='utf8') as f:
         json.dump(chart_data, f, ensure_ascii=False,  indent=4)
