@@ -41,7 +41,7 @@ def check_eng(string):
 def process_lang(filename):
     eng_com = []
     count = 0 
-    with open(f"comments/{filename}", "r", encoding="utf8") as f:
+    with open(f"opinion_miner/comments/{filename}", "r", encoding="utf8") as f:
         comments = json.load(f)
         
     for item in comments:
@@ -60,8 +60,8 @@ def process_lang(filename):
     eng_com.append({'total_comments': count})
     nn = filename.split("_")
     new_name = f"{nn[0]}_{nn[1]}_{eng_com[-1]['total_comments']}"
-    with open(f"comments/english_lang/{new_name}.json", "w", encoding='utf8') as f:
-        json.dump(eng_com, f)
+    with open(f"opinion_miner/english_lang_comments/{new_name}.json", "w", encoding='utf8') as f:
+        json.dump(eng_com, f, indent=4)
 
 
 #variables
@@ -82,7 +82,7 @@ for i in range(100000):
 #====================================================================#
                  
 if __name__ == '__main__':
-    flist = os.listdir("comments")
+    flist = os.listdir("opinion_miner/comments")
     p = mp.Pool()
     mapped_values = list(tqdm.tqdm(p.imap_unordered(process_lang, flist), total=len(flist)))
     p.close()

@@ -3,14 +3,15 @@ from queue import Queue
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 import pycld2 as cld2
+path = "forlang_song_identifier/data/"
 
 def dump_func(filename, obj):
-    with open(f"{filename}.json", "w", encoding="utf8") as f:
-        json.dump(obj, f, ensure_ascii=False)
+    with open(f"{path}{filename}.json", "w", encoding="utf8") as f:
+        json.dump(obj, f, ensure_ascii=False, indent=0)
     
 
 def get_func(url, sleep_range):
-    header = {'User-Agent': 'Lyrics checker'}
+    header = {'User-Agent': 'Lyrics language checker'}
     r = requests.get(url, headers = header)
     if r.status_code != 200:
         print(f"\n{r.status_code} from {url}")
@@ -41,19 +42,19 @@ def checklang(song, lyrics):
         
     except ValueError as e:
         errors.append(song)
-        with open("errors.json", "w", encoding="utf-8") as f:
+        with open(path+"errors.json", "w", encoding="utf-8") as f:
             json.dump(errors, f, ensure_ascii=False)
         return
     
     language = re.search("ENGLISH", str(details))
     if language == None:
         foreignlang.append(song)
-        with open("foreignlang.json", "w", encoding="utf-8") as f:
+        with open(path+"foreignlang.json", "w", encoding="utf-8") as f:
             json.dump(foreignlang, f)
 
     if len(re.findall("Unknown", str(details))) < 2:
         foreignlang.append(song)
-        with open("foreignlang.json", "w", encoding="utf-8") as f:
+        with open(path+"foreignlang.json", "w", encoding="utf-8") as f:
             json.dump(foreignlang, f)
             
     #============================================================#
@@ -66,7 +67,6 @@ def az_artist_searcher(artist):
     
     if not re.search("Artist results", r.text):
         return 0
-    
     
     link_list = []
     for item in soup.select('div'):
@@ -112,15 +112,17 @@ def az_artist_searcher(artist):
 
 
 def az_song_searcher(song):
-    artist = song[0]
-    title = song[1]
+    artist = song[1]
+    title = song[0]
     song = "+".join(song)
     song = re.sub(r"\s", "+", song)
-
     r = get_func(f"https://search.azlyrics.com/search.php?q={song}", (10, 20))
+
     if r == 0:
         return 0
     if not re.search("Song results", r.text):
+        with open ("lyric.txt", "w") as f:
+            f.write(r.text)
         return 0
     else:
         soup = BeautifulSoup(r.text, 'html.parser') 
@@ -134,6 +136,8 @@ def az_song_searcher(song):
 
     for link in link_list:
         ll = link.split("/")
+        print(ll)
+        print(re.sub(r"\s", "", artist), ll[4])
         art = textdistance.jaro_winkler(re.sub(r"\s", "", artist), ll[4])
         tit = textdistance.jaro_winkler(re.sub(r"\s", "", title), ll[5][:-5])
         if art and tit > 0.8:
@@ -156,7 +160,6 @@ def get_az_lyrics(url):
 def az():
     while q.empty() == False:
         song = q.get()
-
         lyrics = az_song_searcher(song)
         if lyrics == 0:
             errors.append(song)
@@ -223,10 +226,8 @@ def lcom_artist_searcher(artist):
         return song_list           
 
 if __name__ == '__main__':
-    
     #============================================================#
     #set of characters cld2 is unable to process
-    
     bads = set()
     for i in range(100000):
         try:
@@ -240,7 +241,7 @@ if __name__ == '__main__':
     #Load existing data from files
     q = Queue()
     try:
-        with open("queue.json", "r", encoding="utf-8") as f:
+        with open(path+"queue.json", "r", encoding="utf-8") as f:
             init_qlist = json.load(f)
             for item in init_qlist:
                 q.put(item)
@@ -248,17 +249,17 @@ if __name__ == '__main__':
         pass
     
         
-    with open("unique.json", "r", encoding="utf-8") as f:
+    with open(path+"unique.json", "r", encoding="utf-8") as f:
         entries = json.load(f)
     try:
-        with open ("errors.json", "r", encoding="utf-8") as f:
+        with open (path+"errors.json", "r", encoding="utf-8") as f:
             errors = json.load(f)
             
     except:
         errors = []
     
     try:
-        with open ("foreignlang.json", "r", encoding="utf-8") as f:
+        with open (path+"foreignlang.json", "r", encoding="utf-8") as f:
             foreignlang = json.load(f)
     except:
         foreignlang = []

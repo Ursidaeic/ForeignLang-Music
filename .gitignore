@@ -114,9 +114,11 @@ dmypy.json
 .pyre/
 
 # Datasets
-/memes/*
-
-
-#Jupyter notebooks
-# *.ipynb
-memes-datasets.zip
+/acharts/charts_data/*
+/comment_scraper/comments/*
+/forlang_song_identifier/data/*
+/forlang_song_identifier/raw/*
+/meme_clustering/comments/*
+/meme_clustering/raw/*
+/meme_clustering/raw_processed/*
+/opinion_miner/comments/*
