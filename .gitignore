@@ -117,6 +117,7 @@ dmypy.json
 /acharts/charts_data/*
 /comment_scraper/comments/*
 /forlang_song_identifier/data/*
+/forlang_song_identifier/english_lang_comments/*
 /forlang_song_identifier/raw/*
 /meme_clustering/comments/*
 /meme_clustering/raw/*

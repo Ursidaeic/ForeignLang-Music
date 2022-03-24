@@ -117,11 +117,11 @@ if __name__ == '__main__':
         year = str(year)
         fromweek = year + "/" + week
 
-        with open (f'acharts/chart_data/{output}.json', "w", encoding='utf8') as f:
+        with open (f'acharts/charts_data/{output}.json', "w", encoding='utf8') as f:
             json.dump(chart_data, f, ensure_ascii=False, indent=4)
 
 
         time.sleep(random.randint(5,10))
 
-    with open (f'acharts/chart_data/{output}.json', "w", encoding='utf8') as f:
+    with open (f'acharts/charts_data/{output}.json', "w", encoding='utf8') as f:
         json.dump(chart_data, f, ensure_ascii=False,  indent=4)

@@ -2,8 +2,8 @@
 import json, os
 
 unique = set(())
-for fn in os.listdir("acharts/chart_data"):
-    with open (f"acharts/chart_data/{fn}", "r", encoding="utf8") as f:
+for fn in os.listdir("acharts/charts_data"):
+    with open (f"acharts/charts_data/{fn}", "r", encoding="utf8") as f:
         data = json.load(f)
     
     for week in data.values():
