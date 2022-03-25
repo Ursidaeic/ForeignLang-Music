@@ -1,4 +1,4 @@
-import requests, time, random, json, configparser
+import requests, time, random, json, configparser, os
 from bs4 import BeautifulSoup
 
 def get_chart(url, fromweek, agent):
@@ -75,6 +75,11 @@ if __name__ == '__main__':
     if check_r.status_code == 404:
         print("The week you asked to scrape back to is not contained within the Acharts archive")
         exit()
+
+    try:
+        os.mkdir("acharts/charts_data")
+    except:
+        pass
     #-----------------------------------------------------------------------------------#
 
     #single-digit week numbers are zero padded, thus we need to add them to the list manually

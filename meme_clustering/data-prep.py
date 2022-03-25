@@ -1,4 +1,4 @@
-import json, pickle, random
+import json, pickle, random, os
 from tqdm import tqdm
 
 import pandas as pd
@@ -22,7 +22,7 @@ def process(fn):
     entire_pos_list = []
     author_list = []
 
-    with open (f"comments/{fn}.json", "r", encoding="utf8") as f:
+    with open (f"meme_clustering/comments/{fn}.json", "r", encoding="utf8") as f:
         data = json.load(f)            
     for item in data[:-1]:
         #get tokens and POS tags from PRSR
@@ -69,12 +69,16 @@ def process(fn):
     df = pd.DataFrame(list(zip(kw_list, entire_pos_list, author_list)),
            columns =['KW', 'POS', 'Artist'])
     name = fn.split("_")[1]
-    with open (f"saves/memes/raw/{name.lower()}_{count}.pickle", "wb") as f:
+    with open (f"meme_clustering/raw/{name.lower()}_{count}.pickle", "wb") as f:
         pickle.dump(df, f)
 
 
 
 if __name__ == "__main__":
+    try:
+        os.mkdir("meme_clustering/raw")
+    except:
+        pass
     fn_list = [
         'J.Balvin_MiGente_118933_2017_es',
         'PSY_GangnamStyle_2993360_2012_ko',

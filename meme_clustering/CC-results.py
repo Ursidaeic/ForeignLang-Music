@@ -1,5 +1,5 @@
 import numpy as np
-import pickle, argparse
+import pickle, argparse, os
 from tqdm import tqdm
 from pprint import pprint
 
@@ -14,7 +14,7 @@ def sort_by_values_len(dict):
 def process_results(fn):
     chunk_iter = 0
     cossim = []
-    with open (f"memes/raw_processed/{fn}_cosines.pickle", "rb") as f:
+    with open (f"meme_clustering/raw_processed/{fn}_cosines.pickle", "rb") as f:
         while True:
             try:
                 chunk = pickle.load(f)
@@ -27,10 +27,8 @@ def process_results(fn):
     cossim = np.array(cossim, dtype=object)
     cossim=np.concatenate(cossim)
 
-    with open (f"memes/raw_processed/{fn}_POS.pickle", "rb") as f:
+    with open (f"meme_clustering/raw_processed/{fn}_POS.pickle", "rb") as f:
         POS_dict = pickle.load(f)
-    # for k, v in POS_dict.items():
-    #     POS_dict[k] = set(v)
 
     inverted_pos = {}
     for k,values in POS_dict.items():
@@ -59,13 +57,15 @@ def process_results(fn):
         if len(inverted_pos[a].intersection(inverted_pos[b]))!=0 and b!=a:
             goods.append(tuple(cossim[pair]))
 
-    print(sorted(list(ke)))
     goods = np.array(goods)
-    print(goods.shape)
-    with open (f"memes/results/{fn}.pickle", "wb") as f:
+    with open (f"meme_clustering/results/{fn}.pickle", "wb") as f:
         pickle.dump(goods, f)
 
 if __name__ == "__main__":
+    try:
+        os.mkdir("meme_clustering/results")
+    except:
+        pass
     parser = argparse.ArgumentParser()
     required = parser.add_argument_group("Required arguments")
     required.add_argument("--songname", '-sn', help="The name of the song whose results you wish to process")

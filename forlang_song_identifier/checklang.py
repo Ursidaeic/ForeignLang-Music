@@ -1,4 +1,4 @@
-import json, requests, time, random, re, textdistance, threading
+import json, requests, time, random, re, textdistance, threading, os
 from queue import Queue
 from bs4 import BeautifulSoup
 from tqdm import tqdm

@@ -188,9 +188,11 @@ def main():
     optional.add_argument("--help", '-h', help="Help", action='help')
     args = parser.parse_args()
 
+    try:
+        os.mkdir("comment_scraper/comments")
+    except:
+        pass
     # --------------------------------------------------------------------- #
-
-
 
     likes = 0
     if args.likes:

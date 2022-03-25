@@ -1,6 +1,11 @@
 #this is a script to process the charts data gathered in the acharts project folder and prepare it for checklang.py
 import json, os
 
+try:
+    os.mkdir("forlang_song_identifier/data")
+except:
+    pass
+
 unique = set(())
 for fn in os.listdir("acharts/charts_data"):
     with open (f"acharts/charts_data/{fn}", "r", encoding="utf8") as f:

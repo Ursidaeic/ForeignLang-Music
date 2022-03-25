@@ -29,6 +29,10 @@ def normalise(A):
 
 
 if __name__ == '__main__':
+    try:
+        os.mkdir("meme_clustering/raw_processed")
+    except:
+        pass
     parser = argparse.ArgumentParser()
     required = parser.add_argument_group("Required arguments")
     required.add_argument("--songname", '-sn', help="The name of the song whose results you wish to process")
@@ -38,14 +42,14 @@ if __name__ == '__main__':
 
     #LOAD DATA
     print("Loading from file")
-    for f in os.listdir("memes/raw"):
+    for f in os.listdir("meme_clustering/raw"):
         if fn in f:
             fn = f
 
 
 
     name = fn.split("_")[0]
-    with open (f"memes/raw/{fn}", "rb") as f:
+    with open (f"meme_clustering/raw/{fn}", "rb") as f:
         df = pickle.load(f)
     print("Removing bad data")
     df = [df.iloc[i] for i in range(len(df)) if len(df.iloc[i]['POS']) > 2]
@@ -92,7 +96,7 @@ if __name__ == '__main__':
 
         slice_start += rows_in_slice
         slice_end = slice_start + rows_in_slice
-        with open (f"memes/raw_processed/{name}_cosines.pickle", "ab+") as f:
+        with open (f"meme_clustering/raw_processed/{name}_cosines.pickle", "ab+") as f:
             pickle.dump(cosine_matrix, f)
         pbar.update(1)
 
@@ -100,7 +104,7 @@ if __name__ == '__main__':
 
     print("Calculating LCS results")
     lcs_result = lcs(POS)
-    with open (f"memes/raw_processed/{name}_POS.pickle", "wb") as f:
+    with open (f"meme_clustering/raw_processed/{name}_POS.pickle", "wb") as f:
         pickle.dump(lcs_result, f)
 
 

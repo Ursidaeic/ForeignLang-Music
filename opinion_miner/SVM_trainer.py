@@ -43,6 +43,6 @@ if __name__ == "__main__":
     print(classification_report(y_test, y_pred))
     
 
-    with open('SVM.pickle', 'wb') as f:
+    with open('resources/SVM.pickle', 'wb') as f:
         # Pickle the 'data' dictionary using the highest protocol available.
         pickle.dump(clf, f, pickle.HIGHEST_PROTOCOL)

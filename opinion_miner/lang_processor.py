@@ -82,7 +82,11 @@ for i in range(100000):
 #====================================================================#
                  
 if __name__ == '__main__':
-    flist = os.listdir("opinion_miner/comments")
+    try:
+        os.mkdir("opinion_miner/english_lang_comments")
+    except:
+        pass
+    flist = [fn for fn in os.listdir("opinion_miner/comments") if ".json" in fn]
     p = mp.Pool()
     mapped_values = list(tqdm.tqdm(p.imap_unordered(process_lang, flist), total=len(flist)))
     p.close()
