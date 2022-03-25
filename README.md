@@ -8,4 +8,4 @@ I have elected to group all the tools into one project folder as one script will
 If you wish to make use of the datasets I coallated instead of producing your own, they can all be found in [this Google Drive](https://drive.google.com/drive/folders/1f6OK0lZTwU937JwAzNPQXyRbNwlp8XxZ?usp=sharing). Here you will find the full comments lists, the subsequent English-language filtered comments, and finally the English-language comments that have been further filtered for opinion-containing comments. Additionally, all the datasets associated with the [meme clustering](https://github.com/Ursidaeic/ForeignLang-Music/tree/main/meme_clustering) methodology - most notably the final .gexf graphs visualising the clusters- can be found in the memes_datasets zip. 
 
 ## Contact
-If you wish to contact me regarding any of the tools, techniques, or datasets contained within this project, you can do so at charlie.c.armsetad@gmail.com
+If you wish to contact me regarding any of the tools, techniques, or datasets contained within this project, you can do so at charlie.c.armstead@gmail.com
