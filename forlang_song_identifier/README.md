@@ -7,4 +7,4 @@ This script will parse the data remove duplicate songs, which it will then save 
 The reason I have elected to separate this function out from the main folder is so users can have more control over the project structure should they wish to replicate it.
 
 This script makes use of the PyCLD2 package for language detection as I found it most accurate. 
-Unfortunately I ran into issues install it from pip, and consequently needed to manually download the binary, which can be found [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pycld2)
+Unfortunately I ran into issues installing it from pip, and consequently needed to manually download the binary, which can be found [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pycld2).
