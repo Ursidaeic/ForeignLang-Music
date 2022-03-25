@@ -1,2 +1,0 @@
-This is a scraper for the music charts database https://acharts.co/
-There are two files associated with this program: the acharts.py script and the configuration file achart_config.ini. In order for the former to function, the latter needs to be supplied a variety of information, in particular a user agent and contact email address in order to ensure that we comply with the ethical scraping practices outlined by James Densmore  
