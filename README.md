@@ -3,8 +3,9 @@ This repository contains the main tools that I developed for my research project
 
 ## Getting started
 I have elected to group all the tools into one project folder as one script will tend to rely on data produced by the previous. Consequently, I have provided one requirements.txt for the entire project, which can be installed with the following command
-
-```bash pip install -r requirements.txt ```
+```bash
+pip install -r requirements.txt 
+```
 
 One noteable exception is the PyCLD2 language detection package which is used in the [opinion_miner](https://github.com/Ursidaeic/ForeignLang-Music/tree/main/opinion_miner)  and [forlang_song_identifier](https://github.com/Ursidaeic/ForeignLang-Music/tree/main/forlang_song_identifier) folders. I had trouble installing this with pip, and so to work around this installed it directly from the binary, which can be found [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pycld2). 
 
