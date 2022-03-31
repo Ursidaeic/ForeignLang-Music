@@ -1,4 +1,4 @@
-# Project repository exploring the reception of foreign language music in the English-speaking world. 
+# Repository for project exploring the reception of foreign language music in the English-speaking world. 
 This repository contains the main tools that I developed for my research project into the way the public recieves foreign language music on YouTube. It provides scripts for downloading YouTube comments from the YouTube API, scraping and processing charts data, filtering comments based off content and language, and a novel methodology for clustering memes using cosine similarity and syntactic features in tandem.
 
 ## Getting started
