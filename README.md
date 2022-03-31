@@ -2,7 +2,7 @@
 This repository contains the main tools that I developed for my research project into the way the public recieves foreign language music on YouTube. It provides scripts for downloading YouTube comments from the YouTube API, scraping and processing charts data, filtering comments based off content and language, and a novel methodology for clustering memes using cosine similarity and syntactic features in tandem.
 
 ## Getting started
-I have elected to group all the tools into one project folder as one script will tend to rely on data produced by the previous. Consequently, I have provided one requirements.txt for the entire project, which can be installed with the following command
+I have elected to group all the tools into one project folder as one script will tend to rely on data produced by the previous. Consequently, I have provided one requirements.txt for the entire project, which can be installed with the following command:
 ```bash
 pip install -r requirements.txt 
 ```
